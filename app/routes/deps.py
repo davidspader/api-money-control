@@ -19,8 +19,5 @@ def auth(
     db_session: SessionSqlAlchemy = Depends(get_db_session),
     token = Depends(oauth_scheme)
 ):
-    if TEST_MODE:
-        return
-    
     uc = UserUseCases(db_session=db_session)
     uc.verify_token(token=token)
