@@ -4,10 +4,10 @@ from app.db.models import Category as CategoryModel
 from app.main import app
 
 client = TestClient(app)
-headers = {"Authorization": "Bearer token"}
-client.headers = headers
 
-def test_add_category_route(db_session, user_on_db):
+def test_add_category_route(db_session, user_on_db, authentication_token):
+    client.headers = authentication_token
+    
     body = {
         "name": 'category name',
         "user_id": user_on_db.id
