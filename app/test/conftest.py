@@ -36,6 +36,22 @@ def user_on_db(db_session):
     db_session.commit()
 
 @pytest.fixture()
+def another_user_on_db(db_session):
+    user = UserModel(
+        username='username2',
+        password=cryptContext.hash('pass#')
+    )
+
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
+
+    yield user
+
+    db_session.delete(user)
+    db_session.commit()
+
+@pytest.fixture()
 def authentication_token(db_session, user_on_db):
     user = User(
         username=user_on_db.username,
