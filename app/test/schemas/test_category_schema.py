@@ -12,6 +12,13 @@ def test_category_schema(user_on_db):
         'user_id': user_on_db.id
     }
 
+def test_category_schema_invalid_name(user_on_db):
+    with pytest.raises(ValueError):
+        Category(
+            name='',
+            user_id=user_on_db.id
+        )
+
 def test_category_schema_invalid_user_id():
     with pytest.raises(ValueError):
         Category(
