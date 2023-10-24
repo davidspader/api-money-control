@@ -3,7 +3,6 @@ from app.schemas.base import CustomBaseModel
 
 class Category(CustomBaseModel):
     name: str
-    user_id: int
 
     @field_validator('name')
     def validate_name(cls, value):
@@ -12,6 +11,7 @@ class Category(CustomBaseModel):
         return value
 class CategoryOutput(Category):
     id: int
+    user_id: int
 
     class Config:
         orm_mode=True
