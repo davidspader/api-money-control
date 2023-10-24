@@ -83,4 +83,16 @@ class UserUseCases:
         user = self.db_session.query(UserModel).filter_by(username=username).first()
         return user
     
+    def _get_user_by_token(self, token: str):
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        except JWTError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Invalid token'
+            )
+        
+        user = self._get_user(username=data['sub'])
+
+        return user 
     

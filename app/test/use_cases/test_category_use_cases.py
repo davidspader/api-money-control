@@ -13,7 +13,6 @@ def test_add_category_use_case(db_session, user_on_db):
     )
 
     uc.add_category(category=category)
-
     categories = db_session.query(CategoryModel).all()
 
     assert len(categories) == 1
