@@ -1,7 +1,7 @@
 from  pydantic import field_validator
 from app.schemas.base import CustomBaseModel
 
-class Category(CustomBaseModel):
+class CategoryInput(CustomBaseModel):
     name: str
 
     @field_validator('name')
@@ -9,9 +9,11 @@ class Category(CustomBaseModel):
         if len(value) == 0:
             raise ValueError("empty name not allowed")
         return value
+class Category(CategoryInput):
+    name: str
+    user_id: int
 class CategoryOutput(Category):
     id: int
-    user_id: int
 
     class Config:
         orm_mode=True
