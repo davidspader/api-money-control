@@ -1,5 +1,4 @@
 import pytest
-from jose import jwt
 from decouple import config
 from app.db.connection import Session
 from passlib.context import CryptContext
