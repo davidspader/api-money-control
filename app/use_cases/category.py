@@ -10,3 +10,7 @@ class CategoryUseCases:
         category = CategoryModel(**category.dict())
         self.db_session.add(category)
         self.db_session.commit()
+
+    def list_categories(self, user_id: int):
+        categories = self.db_session.query(CategoryModel).where(CategoryModel.user_id == user_id).all()
+        return categories
