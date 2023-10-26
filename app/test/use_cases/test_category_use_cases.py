@@ -23,8 +23,8 @@ def test_add_category_use_case(db_session, user_on_db):
     db_session.commit()
 
 def test_list_categories(db_session, categories_on_db):
-    user_id = categories_on_db[0]
-    categories_on_db = categories_on_db[1]
+    user_id = categories_on_db[1].id
+    categories_on_db = categories_on_db[2]
 
     uc = CategoryUseCases(db_session=db_session)
     categories = uc.list_categories(user_id=user_id)

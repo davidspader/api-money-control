@@ -17,7 +17,7 @@ def add_category(
 
     return Response(status_code=status.HTTP_201_CREATED)
 
-@router.get('/list', response_model=List[CategoryOutput], description='List categories')
+@router.get('/list/{user_id}', response_model=List[CategoryOutput], description='List categories')
 def list_categories(
     user_id: int,
     db_session: Session = Depends(get_db_session)
