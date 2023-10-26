@@ -66,20 +66,6 @@ def authentication_token(db_session, user_on_db):
     yield headers
 
 @pytest.fixture()
-def authentication_token(db_session, user_on_db):
-    user = User(
-        username=user_on_db.username,
-        password='pass#'
-    )
-
-    uc = UserUseCases(db_session=db_session)
-    token_data = uc.user_login(user=user, expires_in=1)
-
-    headers = {"Authorization": f"Bearer {token_data.access_token}"}
-
-    yield headers
-
-@pytest.fixture()
 def categories_on_db(db_session, user_on_db):
     data = [user_on_db.id]
     
