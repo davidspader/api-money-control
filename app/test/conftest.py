@@ -78,30 +78,3 @@ def authenticated_user(db_session):
 
     db_session.delete(user)
     db_session.commit()
-
-@pytest.fixture()
-def categories_on_db(db_session, authenticated_user):
-    data = [authenticated_user[0]]
-    # user = authenticated_user[1]
-    
-    categories = [
-        CategoryModel(name='category 1', user_id=1),
-        CategoryModel(name='category 2', user_id=1),
-        CategoryModel(name='category 3', user_id=1),
-        CategoryModel(name='category 4', user_id=1)
-    ]
-
-    for category in categories:
-        db_session.add(category)
-    db_session.commit()
-
-    for category in categories:
-        db_session.refresh(category)
-    
-    data.append(categories)
-    
-    yield data
-
-    for category in categories:
-        db_session.delete(category)
-    db_session.commit()
