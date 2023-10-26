@@ -52,28 +52,43 @@ def another_user_on_db(db_session):
     db_session.commit()
 
 @pytest.fixture()
-def authentication_token(db_session, user_on_db):
-    user = User(
-        username=user_on_db.username,
-        password='pass#'
+def authenticated_user(db_session):
+    user = UserModel(
+        username='authenticated_user',
+        password=cryptContext.hash('pass#')
     )
 
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
+
+    user_login = User(
+        username=user.username,
+        password='pass#'
+    ) 
+
     uc = UserUseCases(db_session=db_session)
-    token_data = uc.user_login(user=user, expires_in=1)
+    token_data = uc.user_login(user=user_login, expires_in=1)
 
     headers = {"Authorization": f"Bearer {token_data.access_token}"}
 
-    yield headers
+    data = [headers, user]
+
+    yield data
+
+    db_session.delete(user)
+    db_session.commit()
 
 @pytest.fixture()
-def categories_on_db(db_session, user_on_db):
-    data = [user_on_db.id]
+def categories_on_db(db_session, authenticated_user):
+    data = [authenticated_user[0]]
+    # user = authenticated_user[1]
     
     categories = [
-        CategoryModel(name='category 1', user_id=user_on_db.id),
-        CategoryModel(name='category 2', user_id=user_on_db.id),
-        CategoryModel(name='category 3', user_id=user_on_db.id),
-        CategoryModel(name='category 4', user_id=user_on_db.id)
+        CategoryModel(name='category 1', user_id=1),
+        CategoryModel(name='category 2', user_id=1),
+        CategoryModel(name='category 3', user_id=1),
+        CategoryModel(name='category 4', user_id=1)
     ]
 
     for category in categories:
