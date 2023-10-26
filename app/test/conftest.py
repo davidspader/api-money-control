@@ -62,13 +62,8 @@ def authenticated_user(db_session):
     db_session.commit()
     db_session.refresh(user)
 
-    user_login = User(
-        username=user.username,
-        password='pass#'
-    ) 
-
     uc = UserUseCases(db_session=db_session)
-    token_data = uc.user_login(user=user_login, expires_in=1)
+    token_data = uc.user_login(user=User(username=user.username,password='pass#'), expires_in=1)
 
     headers = {"Authorization": f"Bearer {token_data.access_token}"}
 
@@ -77,4 +72,30 @@ def authenticated_user(db_session):
     yield data
 
     db_session.delete(user)
+    db_session.commit()
+
+@pytest.fixture()
+def categories_on_db(db_session, authenticated_user):
+    user = authenticated_user[1]
+
+    new_categories = [
+        CategoryModel(name='category 1', user_id=user.id),
+        CategoryModel(name='category 2', user_id=user.id),
+        CategoryModel(name='category 3', user_id=user.id),
+        CategoryModel(name='category 4', user_id=user.id)
+    ]
+
+    for category in new_categories:
+        db_session.add(category)
+    db_session.commit()
+
+    for category in new_categories:
+        db_session.refresh(category)
+
+    data = [authenticated_user[0], user, new_categories]
+
+    yield data
+
+    for category in new_categories:
+        db_session.delete(category)
     db_session.commit()
