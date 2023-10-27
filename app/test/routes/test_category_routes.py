@@ -27,7 +27,7 @@ def test_add_category_route(db_session, authenticated_user):
     db_session.delete(categories[0])
     db_session.commit()
 
-def test_lists_categories(categories_on_db):
+def test_list_categories(categories_on_db):
     token = categories_on_db[0]
     user = categories_on_db[1]
     categories_on_db = categories_on_db[2]
@@ -46,3 +46,13 @@ def test_lists_categories(categories_on_db):
         "user_id": categories_on_db[0].user_id,
         "id": categories_on_db[0].id
     }
+
+def test_list_categories_without_user_id(categories_on_db):
+    token = categories_on_db[0]
+    categories_on_db = categories_on_db[2]
+
+    client.headers = token
+
+    response = client.get(f'/category/list')
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
