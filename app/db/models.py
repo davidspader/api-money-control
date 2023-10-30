@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, func
+from sqlalchemy.orm import relationship
 from app.db.base import Base
 
 class User(Base):
@@ -12,3 +13,14 @@ class Category(Base):
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     name = Column('name', String, nullable=False)
     user_id = Column('user_id', ForeignKey('users.id'), nullable=False)
+    expenses = relationship('Expense', back_populates='category')
+
+class Expense(Base):
+    __tablename__ = 'expenses'
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    description = Column('description', String, nullable=False)
+    value = Column('value', Float)
+    created_at = Column('created_at', DateTime, server_default=func.now())
+    updated_at = Column('updated_at', DateTime, onupdate=func.now())
+    category_id = Column('category_id', ForeignKey('categories.id'), nullable=False)
+    category = relationship('Category', back_populates='expenses')
