@@ -1,7 +1,6 @@
 from fastapi.testclient import TestClient
 from fastapi import status
 from app.db.models import Category as CategoryModel
-from app.schemas.user import User
 from app.main import app
 
 client = TestClient(app)

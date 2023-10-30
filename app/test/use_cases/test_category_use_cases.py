@@ -1,5 +1,3 @@
-import pytest
-from fastapi.exceptions import HTTPException
 from app.use_cases.category import CategoryUseCases
 from app.db.models import Category as CategoryModel
 from app.schemas.category import Category
