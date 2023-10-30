@@ -55,3 +55,23 @@ def test_list_categories_without_user_id(categories_on_db):
     response = client.get(f'/category/list')
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
+def test_delete_category_route(categories_on_db):
+    token = categories_on_db[0]
+    user = categories_on_db[1]
+    categories_on_db = categories_on_db[2]
+
+    client.headers = token
+
+    response = client.delete(f'/category/delete/{user.id}/{categories_on_db[0].id}')
+
+    assert response.status_code == status.HTTP_200_OK
+
+def test_delete_category_route_without_ids(categories_on_db):
+    token = categories_on_db[0]
+
+    client.headers = token
+
+    response = client.delete(f'/category/delete')
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
