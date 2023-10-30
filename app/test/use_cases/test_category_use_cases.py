@@ -38,3 +38,16 @@ def test_list_categories(db_session, categories_on_db):
     assert categories[2].user_id == user_id
     assert categories[3].name == 'category 4'
     assert categories[3].user_id == user_id
+
+def test_delete_category(db_session,categories_on_db):
+    user = categories_on_db[1]
+    categories_on_db = categories_on_db[2]
+
+    assert len(categories_on_db) == 4
+
+    uc = CategoryUseCases(db_session=db_session)
+    uc.delete_category(category_id=categories_on_db[0].id, user_id=user.id)
+
+    categories_on_db = uc.list_categories(user_id=user.id)
+
+    assert len(categories_on_db) == 3
