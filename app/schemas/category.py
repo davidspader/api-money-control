@@ -10,7 +10,6 @@ class CategoryInput(CustomBaseModel):
             raise ValueError("empty name not allowed")
         return value
 class Category(CategoryInput):
-    name: str
     user_id: int
 class CategoryOutput(Category):
     id: int
