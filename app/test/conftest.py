@@ -78,8 +78,8 @@ def authenticated_user(db_session):
 def category_on_db(db_session, authenticated_user):
     user = authenticated_user[1]
 
-    category = CategoryModel(name='category 1', user_id=user.id),
-
+    category = CategoryModel(name='category 1', user_id=user.id)
+    
     db_session.add(category)
     db_session.commit()
 
@@ -91,6 +91,7 @@ def category_on_db(db_session, authenticated_user):
 
     db_session.delete(category)
     db_session.commit()
+
 
 @pytest.fixture()
 def categories_on_db(db_session, authenticated_user):
