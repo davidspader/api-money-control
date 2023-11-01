@@ -43,9 +43,10 @@ def test_expense_input_schema():
         value=99.99,
     )
 
-    expense_input = ExpenseInput(category_id=1, expense=expense)
+    expense_input = ExpenseInput(user_id=1 ,category_id=1, expense=expense)
 
     assert expense_input.dict() == {
+        "user_id": 1,
         "category_id": 1,
         "expense": {
             "description": "Expense description",

@@ -14,7 +14,8 @@ def add_expenses(
     uc = ExpenseUseCases(db_session=db_session)
     uc.add_expense(
         expense=expense_input.expense,
-        category_id=expense_input.category_id
+        category_id=expense_input.category_id,
+        user_id=expense_input.user_id
     )
 
     return Response(status_code=status.HTTP_201_CREATED)

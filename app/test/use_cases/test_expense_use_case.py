@@ -5,6 +5,7 @@ from app.schemas.expense import Expense
 from app.use_cases.expense import ExpenseUseCases
 
 def test_add_expense_uc(db_session, category_on_db):
+    user = category_on_db[1]
     category = category_on_db[2]
 
     uc = ExpenseUseCases(db_session=db_session)
@@ -14,7 +15,7 @@ def test_add_expense_uc(db_session, category_on_db):
         value=99.99
     )
 
-    uc.add_expense(expense=expense, category_id=category.id)
+    uc.add_expense(expense=expense, category_id=category.id, user_id=user.id)
 
     expense_on_db = db_session.query(ExpenseModel).first()
 
@@ -35,4 +36,4 @@ def test_add_expense_uc_invalid_category_id(db_session):
     )
 
     with pytest.raises(HTTPException):
-        uc.add_expense(expense=expense, category_id=1)
+        uc.add_expense(expense=expense, category_id=1, user_id=1)

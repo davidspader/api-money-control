@@ -19,6 +19,7 @@ class Expense(CustomBaseModel):
         return value
 
 class ExpenseInput(CustomBaseModel):
+    user_id: int
     category_id: int
     expense: Expense
 

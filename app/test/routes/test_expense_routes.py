@@ -7,11 +7,13 @@ client = TestClient(app)
 
 def test_add_expense_route(db_session, category_on_db):
   token = category_on_db[0]
+  user = category_on_db[1]
   category = category_on_db[2]
 
   client.headers = token
   
   body = {
+    "user_id": user.id,
     "category_id": category.id,
     "expense": {
       "description": "Expense description",
