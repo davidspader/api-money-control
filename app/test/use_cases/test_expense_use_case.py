@@ -1,3 +1,5 @@
+import pytest
+from fastapi.exceptions import HTTPException
 from app.db.models import Expense as ExpenseModel
 from app.schemas.expense import Expense
 from app.use_cases.expense import ExpenseUseCases
@@ -23,3 +25,14 @@ def test_add_expense_uc(db_session, category_on_db):
 
     db_session.delete(expense_on_db)
     db_session.commit()
+
+def test_add_expense_uc_invalid_category_id(db_session):
+    uc = ExpenseUseCases(db_session=db_session)
+
+    expense = Expense(
+        description='Expense description',
+        value=99.99
+    )
+
+    with pytest.raises(HTTPException):
+        uc.add_expense(expense=expense, category_id=1)
