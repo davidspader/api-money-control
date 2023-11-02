@@ -4,6 +4,7 @@ from app.db.connection import Session
 from passlib.context import CryptContext
 from app.db.models import User as UserModel
 from app.db.models import Category as CategoryModel
+from app.db.models import Expense as ExpenseModel
 from app.use_cases.user import UserUseCases
 from app.schemas.user import User
 
@@ -117,4 +118,23 @@ def categories_on_db(db_session, authenticated_user):
 
     for category in new_categories:
         db_session.delete(category)
+    db_session.commit()
+
+@pytest.fixture()
+def expense_on_db(db_session, category_on_db):
+    token = category_on_db[0]
+    user = category_on_db[1]
+    category = category_on_db[2]
+
+    expense = ExpenseModel(description='Expense Description', value=99.99, category_id=category.id)
+
+    db_session.add(expense)
+    db_session.commit()
+    db_session.refresh(expense)
+
+    data = [token, user, expense, category]
+
+    yield data
+
+    db_session.delete(expense)
     db_session.commit()
