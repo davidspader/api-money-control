@@ -1,5 +1,4 @@
-
-# API - Money control
+# API - Expenses control
 
 **FastAPI, PostgreSQL, SQLAlchemy, Alembic, JWT, Pytest**
 

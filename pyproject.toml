@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "api-money-control"
+name = "api-expenses-control"
 version = "0.1.0"
 description = ""
 authors = ["David Ambrozio <davidambroziodev@gmail.com>"]
