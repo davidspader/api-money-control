@@ -138,3 +138,31 @@ def expense_on_db(db_session, category_on_db):
 
     db_session.delete(expense)
     db_session.commit()
+
+@pytest.fixture()
+def expenses_on_db(db_session, category_on_db):
+    token = category_on_db[0]
+    user = category_on_db[1]
+    category = category_on_db[2]
+
+    new_expenses = [
+        ExpenseModel(description='Expense Description 1', value=99.99, category_id=category.id),
+        ExpenseModel(description='Expense Description 2', value=89.99, category_id=category.id),
+        ExpenseModel(description='Expense Description 3', value=79.99, category_id=category.id),
+        ExpenseModel(description='Expense Description 4', value=69.99, category_id=category.id)
+    ]
+
+    for expense in new_expenses:
+        db_session.add(expense)
+    db_session.commit()
+
+    for expense in new_expenses:
+        db_session.refresh(expense)
+
+    data = [token, user, new_expenses]
+
+    yield data
+
+    for expense in new_expenses:
+        db_session.delete(expense)
+    db_session.commit()
