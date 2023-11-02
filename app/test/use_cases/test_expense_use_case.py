@@ -85,3 +85,19 @@ def test_delete_expense_non_exist(db_session):
     
     with pytest.raises(HTTPException):
         uc.delete_expense(id=1, user_id=1)
+
+def test_list_expenses_by_category(db_session, expenses_on_db):
+    expenses_on_db = expenses_on_db[2]
+
+    uc = ExpenseUseCases(db_session=db_session)
+    expenses = uc.list_expenses_by_category(category_id=expenses_on_db[0].category_id)
+
+    assert len(expenses) == 4
+    assert expenses[0].description == 'Expense Description 1'
+    assert expenses[0].value == 99.99
+    assert expenses[1].description == 'Expense Description 2'
+    assert expenses[1].value == 89.99
+    assert expenses[2].description == 'Expense Description 3'
+    assert expenses[2].value == 79.99
+    assert expenses[3].description == 'Expense Description 4'
+    assert expenses[3].value == 69.99

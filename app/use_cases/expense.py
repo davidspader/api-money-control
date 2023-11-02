@@ -61,3 +61,8 @@ class ExpenseUseCases:
         
         self.db_session.delete(expense_on_db)
         self.db_session.commit()
+
+    def list_expenses_by_category(self, category_id: int):
+        expenses = self.db_session.query(ExpenseModel).where(ExpenseModel.category_id == category_id).all()
+
+        return expenses
