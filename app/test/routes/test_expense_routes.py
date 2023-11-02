@@ -83,3 +83,17 @@ def test_delete_expense_route(db_session, expense_on_db):
     expenses_on_db = db_session.query(ExpenseModel).all()
 
     assert len(expenses_on_db) == 0
+
+def test_list_expenses_by_category(expenses_on_db):
+    token = expenses_on_db[0]
+    expenses_on_db = expenses_on_db[2]
+
+    client.headers = token
+
+    response = client.get(f'/expense/list/{expenses_on_db[0].category_id}')
+
+    assert response.status_code == status.HTTP_200_OK
+
+    expenses = response.json()
+
+    assert len(expenses) == 4

@@ -1,6 +1,7 @@
+from typing import List
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.orm import Session
-from app.schemas.expense import Expense, ExpenseInput
+from app.schemas.expense import Expense, ExpenseInput, ExpenseOutput
 from app.routes.deps import get_db_session, auth
 from app.use_cases.expense import ExpenseUseCases
 
@@ -42,3 +43,13 @@ def update_expense(
     uc.delete_expense(id=id, user_id=user_id)
 
     return Response(status_code=status.HTTP_200_OK)
+
+@router.get('/list/{category_id}', response_model=List[ExpenseOutput], description='List expenses by category')
+def list_expenses_by_category(
+    category_id: int,
+    db_session: Session = Depends(get_db_session)
+):
+    uc = ExpenseUseCases(db_session=db_session)
+    response = uc.list_expenses_by_category(category_id=category_id)
+
+    return response
