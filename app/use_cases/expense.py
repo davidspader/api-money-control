@@ -22,3 +22,24 @@ class ExpenseUseCases:
 
         self.db_session.add(expense_model)
         self.db_session.commit()
+
+    def update_expense(self, id: int, expense: Expense, user_id: int):
+        expense_on_db = self.db_session.query(ExpenseModel).filter_by(id=id).first()
+
+        if expense_on_db is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='No expense was found with the guiven id'
+            )
+        
+        if not expense_on_db.category.user_id == user_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='No expense was found with the guiven id'
+            )
+        
+        expense_on_db.description = expense.description
+        expense_on_db.value = expense.value
+
+        self.db_session.add(expense_on_db)
+        self.db_session.commit()
