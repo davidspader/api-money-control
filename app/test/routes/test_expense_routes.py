@@ -68,3 +68,18 @@ def test_update_expense_route_invalid_id(expense_on_db):
     response = client.put(f'/expense/update/{user.id}/1', json=body)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
+def test_delete_expense_route(db_session, expense_on_db):
+    token = expense_on_db[0]
+    user = expense_on_db[1]
+    expense_on_db = expense_on_db[2]
+
+    client.headers = token
+
+    response = client.delete(f'/expense/delete/{user.id}/{expense_on_db.id}')
+
+    assert response.status_code == status.HTTP_200_OK
+
+    expenses_on_db = db_session.query(ExpenseModel).all()
+
+    assert len(expenses_on_db) == 0

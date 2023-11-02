@@ -31,3 +31,14 @@ def update_expense(
     uc.update_expense(id=id, expense=expense, user_id=user_id)
 
     return Response(status_code=status.HTTP_200_OK)
+
+@router.delete('/delete/{user_id}/{id}', status_code=status.HTTP_200_OK, description='Delete expense')
+def update_expense(
+    id: int,
+    user_id: int,
+    db_session: Session = Depends(get_db_session)
+):
+    uc = ExpenseUseCases(db_session=db_session)
+    uc.delete_expense(id=id, user_id=user_id)
+
+    return Response(status_code=status.HTTP_200_OK)
