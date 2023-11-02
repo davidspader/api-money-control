@@ -68,3 +68,20 @@ def test_update_expense_with_invalid_id(db_session, expense_on_db):
 
     with pytest.raises(HTTPException):
         uc.update_expense(id=1, expense=expense_to_update, user_id=user.id)
+
+def test_delete_expense(db_session, expense_on_db):
+    user = expense_on_db[1]
+    expense = expense_on_db[2]
+
+    uc = ExpenseUseCases(db_session=db_session)
+    uc.delete_expense(id=expense.id, user_id=user.id)
+
+    expenses_on_db = db_session.query(ExpenseModel).all()
+
+    assert len(expenses_on_db) == 0
+
+def test_delete_expense_non_exist(db_session):
+    uc = ExpenseUseCases(db_session=db_session)
+    
+    with pytest.raises(HTTPException):
+        uc.delete_expense(id=1, user_id=1)

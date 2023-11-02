@@ -43,3 +43,21 @@ class ExpenseUseCases:
 
         self.db_session.add(expense_on_db)
         self.db_session.commit()
+
+    def delete_expense(self, id: int, user_id: int):
+        expense_on_db = self.db_session.query(ExpenseModel).filter_by(id=id).first()
+
+        if expense_on_db is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='No expense was found with the guiven id'
+            )
+        
+        if not expense_on_db.category.user_id == user_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='No expense was found with the guiven id'
+            )
+        
+        self.db_session.delete(expense_on_db)
+        self.db_session.commit()
